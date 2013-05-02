@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>os2ogrDialog</class>
+ <widget class="QDialog" name="os2ogrDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>380</width>
+    <height>288</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Ordnance Survey Translator</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Folder Containing Input Files (.gml, .gz)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QLineEdit" name="inputDirLineEdit"/>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="inputDirBrowsePushButton">
+     <property name="text">
+      <string>Browse</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Folder For Outputs</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QLineEdit" name="outputDirLineEdit"/>
+   </item>
+   <item row="3" column="2">
+    <widget class="QPushButton" name="outputDirBrowsePushButton">
+     <property name="text">
+      <string>Browse</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Output Format</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QComboBox" name="outputFormatComboBox"/>
+   </item>
+   <item row="5" column="1" colspan="2">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>225</width>
+       <height>24</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="0" colspan="3">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Temporary Folder</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <widget class="QLineEdit" name="tempDirLineEdit"/>
+   </item>
+   <item row="8" column="2">
+    <widget class="QPushButton" name="tempDirBrowsePushButton">
+     <property name="text">
+      <string>Browse</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="aboutBtn">
+       <property name="text">
+        <string>About</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>63</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Close</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>Convert</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>os2ogrDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>265</x>
+     <y>266</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>340</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>inputDirBrowsePushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>os2ogrDialog</receiver>
+   <slot>browseInputFolder()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>321</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>179</x>
+     <y>129</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>outputDirBrowsePushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>os2ogrDialog</receiver>
+   <slot>browseOutputFolder()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>100</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>219</x>
+     <y>145</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tempDirBrowsePushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>os2ogrDialog</receiver>
+   <slot>browseTempFolder()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>336</x>
+     <y>222</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>154</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>os2ogrDialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>157</x>
+     <y>266</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>65</x>
+     <y>243</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>aboutBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>os2ogrDialog</receiver>
+   <slot>about()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>52</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>189</x>
+     <y>143</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>browseInputFolder()</slot>
+  <slot>browseOutputFolder()</slot>
+  <slot>browseTempFolder()</slot>
+  <slot>about()</slot>
+ </slots>
+</ui>
