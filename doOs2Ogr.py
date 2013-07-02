@@ -1,6 +1,14 @@
+# -*- coding: utf-8 -*-
 
 ## OS2OGR - Converts OS GML to OGR using OsmmLoader
-## Copyright (C) 2011 Faunalia UK
+## Copyright (c) 2011 Peter Wells for Lutra Consulting
+
+## peter dot wells at lutraconsulting dot co dot uk
+## Lutra Consulting
+## 23 Chestnut Close
+## Burgess Hill
+## West Sussex
+## RH15 8HN
 
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -23,6 +31,8 @@ from qgis.gui import *
 
 from frmos2ogr import Ui_os2ogrDialog
 
+import os
+    
 class Dialog(QDialog, Ui_os2ogrDialog):
 
   #====================================================================
@@ -32,7 +42,6 @@ class Dialog(QDialog, Ui_os2ogrDialog):
   #====================================================================
   def __init__(self, iface):
     
-    import os
     import subprocess
     
     # Do init stuff
@@ -43,9 +52,6 @@ class Dialog(QDialog, Ui_os2ogrDialog):
     # Populate shape file types
     self.outputFormatComboBox.addItem('ESRI Shapefile')
     
-    self.inputDir = None
-    self.outputDir = None
-    self.tempDir = None
     self.conversionScript = None
     
     defTempDir = ''
@@ -110,48 +116,39 @@ class Dialog(QDialog, Ui_os2ogrDialog):
       self.pushButton_2.setEnabled(False)
       return
       
-    try:
-      f = open(self.userPrefFile, 'r')
-      for line in f:
-        if line.startswith('inputDir='):
-          self.inputDir = line.split('inputDir=')[1].strip()
-        elif line.startswith('outputDir='):
-          self.outputDir = line.split('outputDir=')[1].strip()
-        elif line.startswith('tempDir='):
-          self.tempDir = line.split('tempDir=')[1].strip()
-      f.close()
-    except:
-      pass
+    # Populate directories
     
-    if not self.inputDir:
-      self.inputDir = defInputDir
-    if not self.outputDir:
-      self.outputDir = defOutputDir
-    if not self.tempDir:
-      self.tempDir = defTempDir
-      
-    # Populate the dialogs
-    self.inputDirLineEdit.setText(self.inputDir)
-    self.outputDirLineEdit.setText(self.outputDir)
-    self.tempDirLineEdit.setText(self.tempDir)
+    settings = QSettings()
+    lastInputFolder = str(settings.value("os2ogr/lastInputFolder", os.path.expanduser("~")).toString())
+    lastOutputFolder = str(settings.value("os2ogr/lastOutputFolder", os.path.expanduser("~")).toString())
+    lastTempFolder = str(settings.value("os2ogr/lastTempFolder", os.path.expanduser("~")).toString())
+    self.inputDirLineEdit.setText(lastInputFolder)
+    self.outputDirLineEdit.setText(lastOutputFolder)
+    self.tempDirLineEdit.setText(lastTempFolder)
     
   def browseInputFolder(self):
     startDir = str( self.inputDirLineEdit.text() )
-    dir = QFileDialog.getExistingDirectory(self, 'Input Folder', startDir, QFileDialog.ShowDirsOnly)
-    self.inputDir = dir
-    self.inputDirLineEdit.setText(self.inputDir)
+    dir = str(QFileDialog.getExistingDirectory(self, 'Input Folder', startDir, QFileDialog.ShowDirsOnly))
+    if dir <> os.sep and dir.lower() <> 'c:\\' and dir <> '':
+        settings = QSettings()
+        settings.setValue("os2ogr/lastInputFolder", dir)
+    self.inputDirLineEdit.setText(dir)
     
   def browseOutputFolder(self):
     startDir = str( self.outputDirLineEdit.text() )
-    dir = QFileDialog.getExistingDirectory(self, 'Output Folder', startDir, QFileDialog.ShowDirsOnly)
-    self.outputDir = dir
-    self.outputDirLineEdit.setText(self.outputDir)
+    dir = str(QFileDialog.getExistingDirectory(self, 'Output Folder', startDir, QFileDialog.ShowDirsOnly))
+    if dir <> os.sep and dir.lower() <> 'c:\\' and dir <> '':
+        settings = QSettings()
+        settings.setValue("os2ogr/lastOutputFolder", dir)
+    self.outputDirLineEdit.setText(dir)
     
   def browseTempFolder(self):
     startDir = str( self.tempDirLineEdit.text() )
-    dir = QFileDialog.getExistingDirectory(self, 'Temporary Folder', startDir, QFileDialog.ShowDirsOnly)
-    self.tempDir = dir
-    self.tempDirLineEdit.setText(self.tempDir)
+    dir = str(QFileDialog.getExistingDirectory(self, 'Temporary Folder', startDir, QFileDialog.ShowDirsOnly))
+    if dir <> os.sep and dir.lower() <> 'c:\\' and dir <> '':
+        settings = QSettings()
+        settings.setValue("os2ogr/lastTempFolder", dir)
+    self.tempDirLineEdit.setText(dir)
       
   def accept(self):
     
@@ -162,13 +159,6 @@ class Dialog(QDialog, Ui_os2ogrDialog):
     
     self.pushButton_2.setEnabled(False)
     self.pushButton_2.setText('Working')
-    
-    # Store prefs
-    f = open(self.userPrefFile, 'w')
-    f.write('inputDir=' + str( self.inputDirLineEdit.text() ) + '\n')
-    f.write('outputDir=' + str( self.outputDirLineEdit.text() ) + '\n')
-    f.write('tempDir=' + str( self.tempDirLineEdit.text() ) + '\n')
-    f.close()
     
     # create a config file in the temp folder
     # envoke the 3rd party script on this
@@ -185,7 +175,7 @@ class Dialog(QDialog, Ui_os2ogrDialog):
       'gfs_file' : "osmm_topo_shape.gfs",
       'standalone' : False }
       
-    QMessageBox.information(None, "Please be patient", "The conversion process may take some time, during which, QGIS may become irresponsive" )
+    QMessageBox.information(None, "Please be patient", "The conversion process may take some time, during which, QGIS may become unresponsive" )
     
     self.pushButton_2.setText('Working...')
     self.pushButton_2.setEnabled(False)
@@ -200,6 +190,8 @@ class Dialog(QDialog, Ui_os2ogrDialog):
     
     if ret == 0:
       QMessageBox.information(None, "INFO", "Conversion complete" )
+    elif ret > 0:
+      QMessageBox.warning(None, "WARNING", "Some files failed to convert, details are:\n\n" + messages )
     else:
       QMessageBox.critical(None, "ERROR", "Conversion failed:\n\n" + messages )
     

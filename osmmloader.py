@@ -35,25 +35,25 @@ class OsmmLoader:
     self.config = config
     self.status = (0, '')
     try:
-        self.src_dir = config['src_dir']
-        self.tmp_dir = config['tmp_dir']
-        self.prep_cmd = config['prep_cmd']
-        self.ogr_cmd = config['ogr_cmd']
-        self.gfs_file = config['gfs_file']
-        if 'out_dir' in config:
-          self.out_dir = config['out_dir']
-        if 'standalone' in config:
-          self.standalone = config['standalone']
-        else:
-          self.standalone = True
+      self.src_dir = config['src_dir']
+      self.tmp_dir = config['tmp_dir']
+      self.prep_cmd = config['prep_cmd']
+      self.ogr_cmd = config['ogr_cmd']
+      self.gfs_file = config['gfs_file']
+      if 'out_dir' in config:
+        self.out_dir = config['out_dir']
+      if 'standalone' in config:
+        self.standalone = config['standalone']
+      else:
+        self.standalone = True
           
     except KeyError, key:
-        if not self.standalone:
-          self.status = (1, 'Missing configuration value:' + key)
-          return self
-        else:
-          print 'Missing configuration value:', key
-          exit(1)
+      if not self.standalone:
+        self.status = (-1, 'Missing configuration value:' + key)
+        return self
+      else:
+        print 'Missing configuration value:', key
+        exit(1)
     self.debug = config.get('debug')
     retVal = self.setup()
     if retVal:
@@ -64,20 +64,20 @@ class OsmmLoader:
     # Determine if we are in debug mode
     self.debug =  (str(self.debug).lower() == 'true')
     if self.debug:
-        print 'Config:', self.config
+      print 'Config:', self.config
     # Check that a valid gfs is file specified
     if not os.path.isfile(self.gfs_file):
-        self.gfs_file = None
-        print 'No valid gfs file found, output schema and geometry types will be determed dynamically by OGR'
+      self.gfs_file = None
+      print 'No valid gfs file found, output schema and geometry types will be determed dynamically by OGR'
     # Check for the existence of the GDAL_DATA environment
     # variable required by ogr2ogr
     if not 'GDAL_DATA' in os.environ:
-        if not self.standalone:
-            self.status = (1, 'Please ensure that the GDAL_DATA environment variable is set and try again')
-            return False
-        else:
-            print 'Please ensure that the GDAL_DATA environment variable is set and try again'
-            exit(1)
+      if not self.standalone:
+        self.status = (-2, 'Please ensure that the GDAL_DATA environment variable is set and try again')
+        return False
+      else:
+        print 'Please ensure that the GDAL_DATA environment variable is set and try again'
+        exit(1)
     # Create a temp directory as a child to the temp
     # directory specified to hold all of our working
     # files and to make cleaning up simple
@@ -87,7 +87,7 @@ class OsmmLoader:
       os.mkdir(self.tmp_dir)
     except OSError:
       if not self.standalone:
-        self.status = (1, 'Could not create temp directory: ' + self.tmp_dir)
+        self.status = (-3, 'Could not create temp directory: ' + self.tmp_dir)
         return False
       else:
         print 'Could not create temp directory: ', self.tmp_dir
@@ -96,73 +96,90 @@ class OsmmLoader:
 
   def cleanup(self):
     if not self.debug:
-        try:
-          shutil.rmtree(self.tmp_dir)
-        except OSError:
-          if not self.standalone:
-            self.status = (1, 'Could not remove temp directory: ' + self.tmp_dir + '. You may need to delete it yourself')
-            return
-          else:
-            print 'Could not remove temp directory: ', self.tmp_dir, '. You may need to delete it yourself'
-            exit(1)
+      try:
+        shutil.rmtree(self.tmp_dir)
+      except OSError:
+        if not self.standalone:
+          self.status = (-4, 'Could not remove temp directory: ' + self.tmp_dir + '. You may need to delete it yourself')
+          return
+        else:
+          print 'Could not remove temp directory: ', self.tmp_dir, '. You may need to delete it yourself'
+          exit(1)
             
   def getStatus(self):
     return self.status
 
   def load (self):
-    # Create string templates for the commands
-    prep_cmd = Template(self.prep_cmd)
-    ogr_cmd = Template(self.ogr_cmd)
     num_files = 0
+    self.errors = []
     for root, dirs, files in os.walk(self.src_dir):
-        for name in files:
-            file_parts = os.path.splitext(name)
-            ext = file_parts[1].lower()
-            if ext in ['.gz', '.gml']:
-                file_path = os.path.join(root, name)
-                print "Processing: %s" % file_path
-                # Run the script to prepare the GML
-                prepared_file = os.path.join(self.tmp_dir, file_parts[0] + '.prepared')
-                if self.debug:
-                    print 'Prepared file:', prepared_file
-                prep_args = shlex.split(prep_cmd.substitute(file_path='\'' + file_path + '\''))
-                if self.debug:
-                    print 'Prep command:', ' '.join(prep_args)
-                f = open(prepared_file, 'w')
-                sErr = open(os.devnull, 'w')
-                sIn = open(os.devnull, 'r')
-                rtn = subprocess.call(prep_args, stdout=f, stderr=sErr, stdin=sIn)
-                sErr.close()
-                sIn.close()
-                f.close()
-                if rtn != 0 and not self.standalone:
-                  self.status = (1, 'Processing stage failed with code ' + str(rtn))
-                  return
-                # Copy over the template gfs file used by ogr2ogr
-                # to read the GML attributes, determine the geometry type etc.
-                # Using a template so we have control over the geometry type
-                # for each table
-                if self.gfs_file:
-                    shutil.copy(self.gfs_file, os.path.join(self.tmp_dir, file_parts[0] + '.gfs'))
-                # Run OGR
-                print "Loading: %s" % file_path
-                
-                # This will set the out_path only if $out_path is present
-                self.out_dir = os.path.join(self.out_dir, file_parts[0])
-                ogr_cmd = Template( ogr_cmd.safe_substitute(out_path='\'' + self.out_dir + '\'') )
-                
-                ogr_args = shlex.split(ogr_cmd.substitute(file_path='\'' + prepared_file + '\''))
-                if self.debug:
-                    print 'OGR command:', ' '.join(ogr_args)
-                rtn = subprocess.call(ogr_args)
-                if rtn != 0 and not self.standalone:
-                  self.status = (1, 'Conversion stage failed with code ' + str(rtn))
-                  return
-                # Increment the file count
-                num_files += 1
-                if not self.debug:
-                  # Clean up by deleting the temporary prepared file
-                  os.remove(prepared_file)
+      for name in files:
+        file_parts = os.path.splitext(name)
+        ext = file_parts[1].lower()
+        if ext in ['.gz', '.gml']:
+          file_path = os.path.join(root, name)
+          try:
+            print "Processing: %s" % file_path
+          except:
+            pass
+          # Run the script to prepare the GML
+          prepared_file = os.path.join(self.tmp_dir, file_parts[0] + '.prepared')
+          if self.debug:
+            print 'Prepared file:', prepared_file
+          prep_args = shlex.split(Template(self.prep_cmd).substitute(file_path='\'' + file_path + '\''))
+          if self.debug:
+            print 'Prep command:', ' '.join(prep_args)
+          f = open(prepared_file, 'w')
+          # rtn = subprocess.call(prep_args, stdout=f, stderr=sErr, stdin=sIn)
+          devNull = open(os.devnull, 'r')
+          p = subprocess.Popen(prep_args, stdout=f, stderr=subprocess.PIPE, stdin=devNull)
+          out, err = p.communicate()
+          devNull.close()
+          f.close()
+          if p.returncode != 0 and not self.standalone:
+            self.errors.append( 'Failed to prepare ' + name + ', ' + prep_args[0] + ' returned ' + err )
+            if not self.debug:
+              os.remove(prepared_file)
+            continue
+            # self.status = (1, 'Processing stage failed with code ' + str(rtn))
+            # return
+          # Copy over the template gfs file used by ogr2ogr
+          # to read the GML attributes, determine the geometry type etc.
+          # Using a template so we have control over the geometry type
+          # for each table
+          if self.gfs_file:
+            shutil.copy(self.gfs_file, os.path.join(self.tmp_dir, file_parts[0] + '.gfs'))
+          # Run OGR
+          print "Loading: %s" % file_path
+          
+          # This will set the out_path only if $out_path is present
+          out_dir = os.path.join(self.out_dir, file_parts[0])
+          ogr_cmd = Template( Template(self.ogr_cmd).safe_substitute(out_path='\'' + out_dir + '\'') )
+          
+          ogr_args = shlex.split(ogr_cmd.substitute(file_path='\'' + prepared_file + '\''))
+          if self.debug:
+            print 'OGR command:', ' '.join(ogr_args)
+          devNull = open(os.devnull, 'r')
+          p = subprocess.Popen(ogr_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=devNull)
+          out, err = p.communicate()
+          devNull.close()
+          if p.returncode != 0 and not self.standalone:
+            self.errors.append( 'Failed to convert ' + name + ', ' + ogr_args[0] + ' returned ' + err )
+            if not self.debug:
+              os.remove(prepared_file)
+            continue
+            # self.status = (1, 'Conversion stage failed with code ' + str(rtn))
+            # return
+          # Increment the file count
+          num_files += 1
+          if not self.debug:
+            # Clean up by deleting the temporary prepared file
+            os.remove(prepared_file)
+    if len(self.errors) > 0:
+      errorString = ''
+      for error in self.errors:
+        errorString += error + '\n'
+      self.status = (1, errorString)
     print "Loaded %i file%s" % (num_files, '' if num_files == 1 else 's')
 
 def main():
@@ -171,7 +188,7 @@ def main():
     sys.exit(1)
   config_file = sys.argv[1]
   if os.path.exists(config_file):
-	# Build a dict of configuration
+  # Build a dict of configuration
     with open(config_file, 'r') as f:
       config = dict([line.replace('\n','').split('=',1) for line in f.readlines() if len(line.replace('\n','')) and line[0:1] != '#'])
     # Build a dict of arguments passed on the command line that

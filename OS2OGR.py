@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
 
 ## OS2OGR - Converts OS GML to OGR using OsmmLoader
-## Copyright (C) 2011 Faunalia UK
+## Copyright (c) 2011 Peter Wells for Lutra Consulting
+
+## peter dot wells at lutraconsulting dot co dot uk
+## Lutra Consulting
+## 23 Chestnut Close
+## Burgess Hill
+## West Sussex
+## RH15 8HN
 
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -23,7 +30,7 @@ from qgis.gui import *
 
 import doOs2Ogr
 
-import resources
+import resources_rc
 
 class OS2OGR:
 

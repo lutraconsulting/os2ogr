@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'DlgAbout.ui'
 #
-# Created: Sun Jul 10 16:21:05 2011
+# Created: Tue Jul 02 10:43:51 2013
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -18,6 +18,9 @@ class Ui_DlgAbout(object):
     def setupUi(self, DlgAbout):
         DlgAbout.setObjectName(_fromUtf8("DlgAbout"))
         DlgAbout.resize(470, 250)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/icons/osTrans.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        DlgAbout.setWindowIcon(icon)
         self.gridLayout = QtGui.QGridLayout(DlgAbout)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.logo = QtGui.QLabel(DlgAbout)
@@ -26,8 +29,8 @@ class Ui_DlgAbout(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.logo.sizePolicy().hasHeightForWidth())
         self.logo.setSizePolicy(sizePolicy)
-        self.logo.setMinimumSize(QtCore.QSize(85, 70))
-        self.logo.setMaximumSize(QtCore.QSize(85, 70))
+        self.logo.setMinimumSize(QtCore.QSize(128, 46))
+        self.logo.setMaximumSize(QtCore.QSize(128, 46))
         self.logo.setText(_fromUtf8(""))
         self.logo.setScaledContents(True)
         self.logo.setObjectName(_fromUtf8("logo"))
@@ -70,10 +73,9 @@ class Ui_DlgAbout(object):
         self.txt.setHtml(QtGui.QApplication.translate("DlgAbout", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans\'; font-size:10pt;\">$PLUGIN_NAME$ is being developed by Peter Wells for Faunalia (</span><a href=\"http://www.faunalia.it\"><span style=\" font-family:\'Sans\'; font-size:10pt; text-decoration: underline; color:#0000ff;\">http://www.faunalia.it</span></a><span style=\" font-family:\'Sans\'; font-size:10pt;\"> &amp; </span><a href=\"http://www.faunalia.co.uk/en\"><span style=\" font-family:\'Sans\'; font-size:10pt; text-decoration: underline; color:#0000ff;\">http://www.faunalia.co.uk/en</span></a><span style=\" font-family:\'Sans\'; font-size:10pt;\">).</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'DejaVu Sans\'; font-size:10pt;\"></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans\'; font-size:10pt;\">$PLUGIN_NAME$ makes use of </span><a href=\"https://github.com/AstunTechnology/osmmloader\"><span style=\" font-family:\'Sans\'; font-size:10pt; text-decoration: underline; color:#0000ff;\">osmmloader</span></a></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'DejaVu Sans\'; font-size:10pt;\"></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans\'; font-size:10pt;\">For support, contact us at </span><a href=\"mailto:info@faunalia.co.uk?subject=$MAIL_SUBJECT$&amp;body=$MAIL_BODY$\"><span style=\" font-family:\'Sans\'; font-size:10pt; text-decoration: underline; color:#0000ff;\">info@faunalia.co.uk</span></a></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans\'; font-size:10pt;\">$PLUGIN_NAME$ is developed by Peter Wells for Lutra Consulting (</span><a href=\"http://www.lutraconsulting.co.uk\"><span style=\" font-family:\'Sans\'; font-size:10pt; text-decoration: underline; color:#0000ff;\">http://www.lutraconsulting.co.uk</span></a><span style=\" font-family:\'Sans\'; font-size:10pt;\">).</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'DejaVu Sans\'; font-size:10pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans\'; font-size:10pt;\">For support, contact us at </span><a href=\"mailto:info@lutraconsulting.co.uk?subject=$MAIL_SUBJECT$&amp;body=$MAIL_BODY$\"><span style=\" font-family:\'Sans\'; font-size:10pt; text-decoration: underline; color:#0000ff;\">info@lutraconsulting.co.uk</span></a></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
 
+import resources_rc

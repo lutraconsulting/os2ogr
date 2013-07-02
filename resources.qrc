@@ -2,7 +2,7 @@
     <qresource prefix="/">
         <file>icons/osTrans.png</file>
     </qresource>
-    <qresource prefix="/faunalia">
-        <file alias="logo">icons/faunalia_logo.png</file>
+    <qresource prefix="/lutra">
+        <file alias="logo">icons/lutra_logo.png</file>
     </qresource>
 </RCC>

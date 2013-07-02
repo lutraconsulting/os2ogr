@@ -150,6 +150,7 @@ class osmmHandler(ContentHandler):
     sys.stdout.write(str.encode('utf-8'))
 
 def main():
+  
   if len(sys.argv) < 2:
     print 'usage: python preposmm4ogr.py gmlfile'
     sys.exit(1)
@@ -167,7 +168,7 @@ def main():
     if os.path.splitext(inputfile)[1].lower() == '.gz':
         file = gzip.open(inputfile, 'r')
     else:
-		# Assume non compressed gml, xml or no extension
+        # Assume non compressed gml, xml or no extension
         file = open(inputfile, 'r')
     parser.parse(file)
   else:
