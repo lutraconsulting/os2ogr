@@ -150,7 +150,10 @@ class OsmmLoader:
           if self.gfs_file:
             shutil.copy(self.gfs_file, os.path.join(self.tmp_dir, file_parts[0] + '.gfs'))
           # Run OGR
-          print "Loading: %s" % file_path
+          try:
+            print "Loading: %s" % file_path
+          except:
+            pass
           
           # This will set the out_path only if $out_path is present
           out_dir = os.path.join(self.out_dir, file_parts[0])

@@ -132,7 +132,7 @@ class Dialog(QDialog, Ui_os2ogrDialog):
     if dir <> os.sep and dir.lower() <> 'c:\\' and dir <> '':
         settings = QSettings()
         settings.setValue("os2ogr/lastInputFolder", dir)
-    self.inputDirLineEdit.setText(dir)
+        self.inputDirLineEdit.setText(dir)
     
   def browseOutputFolder(self):
     startDir = str( self.outputDirLineEdit.text() )
@@ -140,7 +140,7 @@ class Dialog(QDialog, Ui_os2ogrDialog):
     if dir <> os.sep and dir.lower() <> 'c:\\' and dir <> '':
         settings = QSettings()
         settings.setValue("os2ogr/lastOutputFolder", dir)
-    self.outputDirLineEdit.setText(dir)
+        self.outputDirLineEdit.setText(dir)
     
   def browseTempFolder(self):
     startDir = str( self.tempDirLineEdit.text() )
@@ -148,7 +148,7 @@ class Dialog(QDialog, Ui_os2ogrDialog):
     if dir <> os.sep and dir.lower() <> 'c:\\' and dir <> '':
         settings = QSettings()
         settings.setValue("os2ogr/lastTempFolder", dir)
-    self.tempDirLineEdit.setText(dir)
+        self.tempDirLineEdit.setText(dir)
       
   def accept(self):
     
