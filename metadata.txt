@@ -4,7 +4,7 @@ name=Ordnance Survey Translator
 qgisMinimumVersion=1.5.0
 description=Converts GML (compressed) to various OGR formats
 ; category=Vector ; Did not know what my available choices where
-version=version 1.0.1
+version=version 1.1.0
 author=Peter Wells for Lutra Consulting
 email=peter.wells@lutraconsulting.co.uk
 ; end of mandatory metadata
@@ -21,6 +21,10 @@ changelog=0.6 - Initial release
     1.0.1 - Bug fix release
         Fixed bug in windows that caused large translations to fail with 'IOError: [Errno 9] Bad file descriptor'.
         Fixed minor bug where hitting cancel on Browsing for a folder results in an empty folder path being used.
+    
+    1.1.0 - Feature addition
+        Added option to allow inputs to be merged into a single set of output layers.
+        Minor changes to Infor, Warn and Error dialogs.
 
 ; tags are in comma separated value format, spaces are allowed
 tags=ordnance survey,os,mastermap,master map,topography layer,gml,gml gz,gz,gml.gz,convert,translate,shapefile,shape file,shp,shape
@@ -35,7 +39,7 @@ repository=https://github.com/lutraconsulting/os2ogr
 icon=icons/osTrans_128px.png
 
 ; experimental flag
-experimental=True
+experimental=False
 
 ; deprecated flag (applies to the whole plugin and not only to the uploaded version)
 deprecated=False

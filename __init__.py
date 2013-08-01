@@ -30,7 +30,7 @@ def description():
     return "Converts GML (compressed) to various OGR formats"
 
 def version():
-    return "Version 1.0.1"
+    return "Version 1.1.0"
 
 def qgisMinimumVersion():
     return "1.5.0"

@@ -88,7 +88,7 @@ class Dialog(QDialog, Ui_os2ogrDialog):
         elif os.path.isfile( os.path.join( os.environ['OSGEO4W_ROOT'], 'bin', 'ogr2ogr.exe' ) ):
           self.gdal_dir = os.path.join( os.environ['OSGEO4W_ROOT'], 'bin' )
         else:
-          QMessageBox.critical(None, "ERROR", "Can't find ogr2ogr.exe, can't continue" )
+          QMessageBox.critical(None, "Error", "Can't find ogr2ogr.exe, can't continue" )
           self.pushButton_2.setEnabled(False)
           return
           
@@ -104,15 +104,15 @@ class Dialog(QDialog, Ui_os2ogrDialog):
       majorVersion = float( out[5:8] )
     except:
       # not found
-      QMessageBox.critical(None, "ERROR", "Can't find ogr2ogr[.exe], can't continue" )
+      QMessageBox.critical(None, "Error", "Can't find ogr2ogr[.exe], can't continue" )
       self.pushButton_2.setEnabled(False)
       return
         
     if majorVersion < 1.8:
-      QMessageBox.warning(None, "WARNING", "OGR 1.8 or above is recommended to be able to extract all features from the input data" )
+      QMessageBox.warning(None, "Warning", "OGR 1.8 or above is recommended to be able to extract all features from the input data" )
       
     if not 'GDAL_DATA' in os.environ:
-      QMessageBox.critical(None, "ERROR", "Please ensure that the GDAL_DATA environment variable is set and try again" )
+      QMessageBox.critical(None, "Error", "Please ensure that the GDAL_DATA environment variable is set and try again" )
       self.pushButton_2.setEnabled(False)
       return
       
@@ -157,9 +157,6 @@ class Dialog(QDialog, Ui_os2ogrDialog):
     import os
     from osmmloader import OsmmLoader
     
-    self.pushButton_2.setEnabled(False)
-    self.pushButton_2.setText('Working')
-    
     # create a config file in the temp folder
     # envoke the 3rd party script on this
     # looks for errors
@@ -175,6 +172,26 @@ class Dialog(QDialog, Ui_os2ogrDialog):
       'gfs_file' : "osmm_topo_shape.gfs",
       'standalone' : False }
       
+    if self.mergeIntoASingleOutputCheckBox.isChecked():
+      # We need to ensure that the destination folder is empty, warn the user before clearing it
+      reply = QMessageBox.question(self.iface.mainWindow(), 'Warning', "All files and folders under " + self.outputDirLineEdit.text() + " will be deleted before the conversion starts - Continue?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+      if reply == QMessageBox.No:
+        return
+      dirPath = str(self.outputDirLineEdit.text())
+      try:
+        for entry in os.listdir(dirPath):
+          fullPath = os.path.join( dirPath, entry )
+          if os.path.isdir(fullPath):
+            shutil.rmtree(fullPath)
+          else:
+            os.unlink(fullPath)
+      except:
+        # Failed to clean the folder
+        QMessageBox.critical(self.iface.mainWindow(), 'Error', "Could not clean the output folder prior to conversion, conversion aborted.  Please ensure that no layers under " + self.outputDirLineEdit.text() + " are open in QGIS or any other application.")
+        return
+      config['merge'] = True
+      config['ogr_cmd'] = 'ogr2ogr -f "ESRI Shapefile" -append $out_path $file_path'
+      
     QMessageBox.information(None, "Please be patient", "The conversion process may take some time, during which, QGIS may become unresponsive" )
     
     self.pushButton_2.setText('Working...')
@@ -189,11 +206,11 @@ class Dialog(QDialog, Ui_os2ogrDialog):
     ret, messages = loader.getStatus()
     
     if ret == 0:
-      QMessageBox.information(None, "INFO", "Conversion complete" )
+      QMessageBox.information(None, "Info", "Conversion complete" )
     elif ret > 0:
-      QMessageBox.warning(None, "WARNING", "Some files failed to convert, details are:\n\n" + messages )
+      QMessageBox.warning(None, "Warning", "Some files failed to convert, details are:\n\n" + messages )
     else:
-      QMessageBox.critical(None, "ERROR", "Conversion failed:\n\n" + messages )
+      QMessageBox.critical(None, "Error", "Conversion failed:\n\n" + messages )
     
 
   def about(self):

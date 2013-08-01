@@ -46,6 +46,10 @@ class OsmmLoader:
         self.standalone = config['standalone']
       else:
         self.standalone = True
+      if 'merge' in config:
+        self.merge = config['merge']
+      else:
+        self.merge = False
           
     except KeyError, key:
       if not self.standalone:
@@ -156,7 +160,10 @@ class OsmmLoader:
             pass
           
           # This will set the out_path only if $out_path is present
-          out_dir = os.path.join(self.out_dir, file_parts[0])
+          if self.merge:
+            out_dir = self.out_dir
+          else:
+            out_dir = os.path.join(self.out_dir, file_parts[0])
           ogr_cmd = Template( Template(self.ogr_cmd).safe_substitute(out_path='\'' + out_dir + '\'') )
           
           ogr_args = shlex.split(ogr_cmd.substitute(file_path='\'' + prepared_file + '\''))

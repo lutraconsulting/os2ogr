@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'frmos2ogr.ui'
 #
-# Created: Tue Jul 02 10:43:46 2013
+# Created: Thu Jul 25 16:54:47 2013
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_os2ogrDialog(object):
     def setupUi(self, os2ogrDialog):
         os2ogrDialog.setObjectName(_fromUtf8("os2ogrDialog"))
-        os2ogrDialog.resize(380, 288)
+        os2ogrDialog.resize(289, 245)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/icons/osTrans.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         os2ogrDialog.setWindowIcon(icon)
@@ -53,16 +53,16 @@ class Ui_os2ogrDialog(object):
         self.line.setFrameShape(QtGui.QFrame.HLine)
         self.line.setFrameShadow(QtGui.QFrame.Sunken)
         self.line.setObjectName(_fromUtf8("line"))
-        self.gridLayout.addWidget(self.line, 6, 0, 1, 3)
+        self.gridLayout.addWidget(self.line, 7, 0, 1, 3)
         self.label_4 = QtGui.QLabel(os2ogrDialog)
         self.label_4.setObjectName(_fromUtf8("label_4"))
-        self.gridLayout.addWidget(self.label_4, 7, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_4, 8, 0, 1, 1)
         self.tempDirLineEdit = QtGui.QLineEdit(os2ogrDialog)
         self.tempDirLineEdit.setObjectName(_fromUtf8("tempDirLineEdit"))
-        self.gridLayout.addWidget(self.tempDirLineEdit, 8, 0, 1, 2)
+        self.gridLayout.addWidget(self.tempDirLineEdit, 9, 0, 1, 2)
         self.tempDirBrowsePushButton = QtGui.QPushButton(os2ogrDialog)
         self.tempDirBrowsePushButton.setObjectName(_fromUtf8("tempDirBrowsePushButton"))
-        self.gridLayout.addWidget(self.tempDirBrowsePushButton, 8, 2, 1, 1)
+        self.gridLayout.addWidget(self.tempDirBrowsePushButton, 9, 2, 1, 1)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.aboutBtn = QtGui.QPushButton(os2ogrDialog)
@@ -76,7 +76,10 @@ class Ui_os2ogrDialog(object):
         self.pushButton_2 = QtGui.QPushButton(os2ogrDialog)
         self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
         self.horizontalLayout.addWidget(self.pushButton_2)
-        self.gridLayout.addLayout(self.horizontalLayout, 9, 0, 1, 3)
+        self.gridLayout.addLayout(self.horizontalLayout, 10, 0, 1, 3)
+        self.mergeIntoASingleOutputCheckBox = QtGui.QCheckBox(os2ogrDialog)
+        self.mergeIntoASingleOutputCheckBox.setObjectName(_fromUtf8("mergeIntoASingleOutputCheckBox"))
+        self.gridLayout.addWidget(self.mergeIntoASingleOutputCheckBox, 6, 0, 1, 1)
 
         self.retranslateUi(os2ogrDialog)
         QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), os2ogrDialog.accept)
@@ -99,5 +102,6 @@ class Ui_os2ogrDialog(object):
         self.aboutBtn.setText(QtGui.QApplication.translate("os2ogrDialog", "About", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton.setText(QtGui.QApplication.translate("os2ogrDialog", "Close", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_2.setText(QtGui.QApplication.translate("os2ogrDialog", "Convert", None, QtGui.QApplication.UnicodeUTF8))
+        self.mergeIntoASingleOutputCheckBox.setText(QtGui.QApplication.translate("os2ogrDialog", "Merge into a single output", None, QtGui.QApplication.UnicodeUTF8))
 
 import resources_rc
