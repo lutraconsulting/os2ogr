@@ -93,7 +93,7 @@ class Dialog(QDialog, Ui_os2ogrDialog):
           return
           
     # Look for ogr2ogr.exe and check its version
-    majorVersion = 0.0
+    ogrVer = 0
     try:
       sErr = open(os.devnull, 'w')
       sIn = open(os.devnull, 'r')
@@ -101,14 +101,15 @@ class Dialog(QDialog, Ui_os2ogrDialog):
       sErr.close()
       sIn.close()
       out, err = p.communicate()
-      majorVersion = float( out[5:8] )
+      versionParts = out.split('GDAL')[1].split(',')[0].strip().split('.')
+      ogrVer = int(versionParts[0]) * 100 + int(versionParts[1])
     except:
       # not found
       QMessageBox.critical(None, "Error", "Can't find ogr2ogr[.exe], can't continue" )
       self.pushButton_2.setEnabled(False)
       return
         
-    if majorVersion < 1.8:
+    if ogrVer < 108:
       QMessageBox.warning(None, "Warning", "OGR 1.8 or above is recommended to be able to extract all features from the input data" )
       
     if not 'GDAL_DATA' in os.environ:
@@ -119,9 +120,16 @@ class Dialog(QDialog, Ui_os2ogrDialog):
     # Populate directories
     
     settings = QSettings()
-    lastInputFolder = str(settings.value("os2ogr/lastInputFolder", os.path.expanduser("~")).toString())
-    lastOutputFolder = str(settings.value("os2ogr/lastOutputFolder", os.path.expanduser("~")).toString())
-    lastTempFolder = str(settings.value("os2ogr/lastTempFolder", os.path.expanduser("~")).toString())
+    try:
+        # QGIS < 2.0
+        lastInputFolder = str(settings.value("os2ogr/lastInputFolder", os.path.expanduser("~")).toString())
+        lastOutputFolder = str(settings.value("os2ogr/lastOutputFolder", os.path.expanduser("~")).toString())
+        lastTempFolder = str(settings.value("os2ogr/lastTempFolder", os.path.expanduser("~")).toString())
+    except:
+        # QGIS >= 2.0
+        lastInputFolder = str(settings.value("os2ogr/lastInputFolder", os.path.expanduser("~")))
+        lastOutputFolder = str(settings.value("os2ogr/lastOutputFolder", os.path.expanduser("~")))
+        lastTempFolder = str(settings.value("os2ogr/lastTempFolder", os.path.expanduser("~")))
     self.inputDirLineEdit.setText(lastInputFolder)
     self.outputDirLineEdit.setText(lastOutputFolder)
     self.tempDirLineEdit.setText(lastTempFolder)

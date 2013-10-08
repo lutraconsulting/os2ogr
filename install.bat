@@ -21,7 +21,7 @@ rem GNU General Public License for more details.
 rem You should have received a copy of the GNU General Public License
 rem along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-SET PLUGINDIR=%HOMEDRIVE%%HOMEPATH%\.qgis\python\plugins\os2ogr
+SET PLUGINDIR=%HOMEDRIVE%%HOMEPATH%\.qgis2\python\plugins\os2ogr
 mkdir %PLUGINDIR%\icons
 copy /Y *.py %PLUGINDIR%
 copy /Y *.txt %PLUGINDIR%
